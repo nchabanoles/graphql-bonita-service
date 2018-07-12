@@ -1,9 +1,11 @@
 package graphql.resolvers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.model.Book;
+import graphql.model.Loan;
 import graphql.repositories.BookRepository;
 
 /**
@@ -24,4 +26,10 @@ public class Query implements GraphQLRootResolver {
 
     public Book book(String id) { return bookRepository.findById(id); }
 
+    public List<Loan> allLoans() {
+        List<Loan> allLoans = new ArrayList<>();
+        allLoans.add(new Loan("Nicolas","House","Missing Documents"));
+        System.out.println("Returning loans!");
+        return allLoans;
+    }
 }

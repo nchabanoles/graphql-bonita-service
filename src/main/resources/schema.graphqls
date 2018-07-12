@@ -6,6 +6,7 @@ schema {
 type Query {
     allBooks: [Book]
     book(id: String!): Book
+    allLoans: [Loan]
 }
 
 type Mutation {
@@ -18,3 +19,9 @@ type Book {
     genre: String
 }
 
+type Loan {
+    id: ID!
+    customer: String!
+    type: String
+    status: String
+}

@@ -26,6 +26,7 @@ import graphql.servlet.SimpleGraphQLServlet;
  * Created by Nicolas Chabanoles on 12/07/18.
  */
 @Component
+//FIXME @WebServlet(urlPatterns = "/API/graphql")
 @WebServlet(urlPatterns = "/graphql")
 public class BdmService  extends SimpleGraphQLServlet implements TenantLifecycleService{
 
