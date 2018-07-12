@@ -1,21 +1,53 @@
 package com.bonitasoft.bdm.graphql;
 
 import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import graphql.resolvers.Mutation;
 import org.bonitasoft.engine.commons.TenantLifecycleService;
 import org.bonitasoft.engine.commons.exceptions.SBonitaException;
 import org.springframework.stereotype.Component;
+
+import com.coxautodev.graphql.tools.SchemaParser;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoDatabase;
+
+import graphql.repositories.BookRepository;
+import graphql.resolvers.Query;
+import graphql.schema.GraphQLSchema;
+import graphql.servlet.SimpleGraphQLServlet;
 
 /**
  * Created by Nicolas Chabanoles on 12/07/18.
  */
 @Component
 @WebServlet(urlPatterns = "/graphql")
-public class BdmService  extends HttpServlet implements TenantLifecycleService{
+public class BdmService  extends SimpleGraphQLServlet implements TenantLifecycleService{
+
+    private static final BookRepository bookRepository;
+    static {
+        MongoDatabase mongo = new MongoClient(new MongoClientURI("mongodb://mongouser:mongopassword@ds255319.mlab.com:55319/graphql-nodejs")).getDatabase("graphql-nodejs");
+        bookRepository = new BookRepository(mongo.getCollection("books"));
+    }
+
+    public BdmService() {
+        super(buildSchema());
+    }
+
+    private static GraphQLSchema buildSchema() {
+
+        return SchemaParser.newParser()
+                .file("schema.graphqls")
+                .resolvers(new Query(bookRepository), new Mutation(bookRepository))
+                .build()
+                .makeExecutableSchema();
+    }
+
 
     public String getServiceName() {
         return "BDM-Service-GraphQL-Plugin";
@@ -54,7 +86,11 @@ public class BdmService  extends HttpServlet implements TenantLifecycleService{
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        response.getWriter().println("======================== COUCOU writer =============================");
+        try {
+            super.doGet(request, response);
+        } catch (ServletException e) {
+            throw new IOException(e);
+        }
         System.out.println("======================== COUCOU Logger =============================");
     }
 }
