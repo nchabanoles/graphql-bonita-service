@@ -6,23 +6,23 @@ package graphql.model;
 public class Loan {
 
     private final String id;
-    private final String customer;
+    private final String customerId;
     private final String type;
     private final String status;
 
-    public Loan(String customer, String type, String status) {
-        this(null, customer, type, status);
+    public Loan(String customerId, String type, String status) {
+        this(null, customerId, type, status);
     }
 
-    public Loan(String id, String customer, String type, String status) {
+    public Loan(String id, String customerId, String type, String status) {
         this.id = id;
-        this.customer = customer;
+        this.customerId = customerId;
         this.type = type;
         this.status = status;
     }
 
     public String getId() {return id;}
-    public String getCustomer() {return customer;}
+    public String getCustomer() {return customerId;}
     public String getType() {return type;}
     public String getStatus() {return status;}
 

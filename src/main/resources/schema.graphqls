@@ -7,6 +7,8 @@ type Query {
     allBooks: [Book]
     book(id: String!): Book
     allLoans: [Loan]
+    customer(id: String!): Customer
+    allCustomers: [Customer]
 }
 
 type Mutation {
@@ -24,4 +26,9 @@ type Loan {
     customer: String!
     type: String
     status: String
+}
+
+type Customer {
+    id: ID!
+    name: String!
 }
